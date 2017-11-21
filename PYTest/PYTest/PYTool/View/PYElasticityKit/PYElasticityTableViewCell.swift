@@ -151,6 +151,7 @@ class PYElasticityTableViewCell: UITableViewCell {
         })
     }
     private func setUP() {
+        
         contentView.addSubview(elasticityCollectionView)
         contentView.addSubview(topView)
         contentView.addSubview(bottomView)
@@ -179,7 +180,7 @@ class PYElasticityTableViewCell: UITableViewCell {
         self.clickBottomButtonCallBack = clickBottomButtonCallBack
     }
     private func registerEvent() {
-        ///点击了购买 事件的传递
+        /// 事件的传递
         stitchChannelFunc(sender: elasticityCollectionView)
         elasticityCollectionView.clickBottomButtonFunc { [weak self] (currentH) -> (IndexPath)? in
             

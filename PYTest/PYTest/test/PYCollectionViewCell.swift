@@ -36,5 +36,12 @@ class PYCollectionViewCell: UICollectionViewCell {
         imageView.snp.makeConstraints { (make) in
             make.edges.equalTo(contentView)
         }
+        imageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(clickImageView))
+        imageView.addGestureRecognizer(tap)
+    }
+    @objc private func clickImageView() {
+        ///发送消息
+        self.sendSignalFunc(signalKey: K_PYCollectionViewCell_clickImageView, message: "我是小鱼，我是小鱼，小鱼！")
     }
 }

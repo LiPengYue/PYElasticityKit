@@ -28,7 +28,6 @@ UITableViewDataSource
         //iOS8之后默认就是这个值，可以省略
         rowHeight = UITableViewAutomaticDimension
         self.register(PYElasticityTestTCell.classForCoder(), forCellReuseIdentifier: "CELLID")
-       
     }
 }
 
@@ -44,15 +43,12 @@ extension PYTableView {
         cell.modelArray = [
             "不","是","和","还",
         ]
-         cell.backgroundColor = #colorLiteral(red: 0.8520416148, green: 0.9956474186, blue: 1, alpha: 1)
-        ///点击了 展开，监听到了事件
-//        cell.clickBottomButtonFunc {(viewH, cell) -> (IndexPath) in
-//            ///刷新是否展开记录
-//            self.reloadData()
-//            return indexPath
-//        }
+        cell.selectionStyle = .none
+        
+        cell.backgroundColor = #colorLiteral(red: 0.8520416148, green: 0.9956474186, blue: 1, alpha: 1)
+        
         //发送消息
-        self.stitchChannelFunc(sender: cell)
+        NSObject.stitchChannelFunc(sender: cell, receiver: self)
         return cell
     }
 }

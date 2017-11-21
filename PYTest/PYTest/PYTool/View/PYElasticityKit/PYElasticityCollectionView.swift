@@ -145,7 +145,7 @@ UICollectionViewDataSource
         self.addSubview(collectionView)
         self.addSubview(button)
     
-        let currentViewHRound = (currentCollectionViewH)
+        let currentViewHRound = currentCollectionViewH
         collectionView.snp.makeConstraints { (make) in
             make.top.equalTo(self)
             make.left.right.equalTo(self)
@@ -170,7 +170,7 @@ UICollectionViewDataSource
         collectionView.reloadData()
     }
     private var indexPath: IndexPath?
-//    var isFirstCallBack = true
+    //    var isFirstCallBack = true
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let buttonPoint = self.convert(point, to: button)
         if button.point(inside: buttonPoint, with: event) {
@@ -273,11 +273,8 @@ extension PYElasticityCollectionView {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELLID, for: indexPath)
         cell.model_BaseData_ = self.modelArray[indexPath.row]
-        cell.receivedSignalFunc { [weak self] (signalKey, massage) -> (Any)? in
-            self?.sendSignalFunc(signalKey: signalKey, message: massage)
-        }
+        NSObject.stitchChannelFunc(sender: cell, receiver: self)
         return cell
-      
     }
 }
 
@@ -287,7 +284,7 @@ extension PYElasticityCollectionView {
             return self.scrollView_!
         }
         if view is UITableView {
-            self.scrollView_ = view as! UIScrollView
+            self.scrollView_ = view as? UIScrollView
             return view as! UIScrollView
         }
         if view.superview == nil {

@@ -9,13 +9,15 @@
 import UIKit
 
 class PYElasticityTestTCell: PYElasticityTableViewCell {
+    let topView = PYTopViewTest()
+    let bottomView = PYElasticityBottomView_Test()
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.configurationCollectionViwFunc(layout: self.layout, cellClass: PYCollectionViewCell.classForCoder(), maxShowItem: 2, maxRowItemNum: 2, isHiddenButton: false, topView: PYTopViewTest(), bottomView: nil, topViewH: kViewCurrentH_XP(H: 100), bottomViewH: nil)
+        self.configurationCollectionViwFunc(layout: self.layout, cellClass: PYCollectionViewCell.classForCoder(), maxShowItem: 2, maxRowItemNum: 2, isHiddenButton: false, topView: topView, bottomView: bottomView, topViewH: kViewCurrentH_XP(H: 100), bottomViewH: kViewCurrentH_XP(H: 100))
         self.setUPButton()
-    
     }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -39,6 +41,10 @@ class PYElasticityTestTCell: PYElasticityTableViewCell {
         self.collectionViewBottomButton.setTitle("收起", for: .selected)
         collectionViewBottomButton.setTitleColor(UIColor.gray, for: .normal)
         collectionViewBottomButton.setTitleColor(UIColor.black, for: .selected)
+        
+        self.viewDispachDataReciveFunc {[weak self] (key, message) -> (Any)? in
+            self?.topView.label.text = message as? String
+        }
     }
     
     var modelArray: [Any]?{

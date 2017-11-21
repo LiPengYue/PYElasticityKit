@@ -8,9 +8,7 @@
 
 import UIKit
 
-class PYElasticityTopView: UIView {
-
-
+class PYElasticityTopView: UIView {    
 }
 
 class PYElasticityBottomView: UIView {
