@@ -260,4 +260,4 @@ class PYElasticityTestTCell: PYElasticityTableViewCell {
 - 修复了在通过对 `self.topViewH`赋值更新 `topView (bottomView) height` 约束的时候会出现莫名的`bug`。
 
 
-[示例代码](https://github.com/LiPengYue/PYElasticityKit)
+[示例代码](https://www.jianshu.com/p/fd32ae2c68f4)
