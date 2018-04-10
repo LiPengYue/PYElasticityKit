@@ -273,7 +273,7 @@ extension PYElasticityCollectionView {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELLID, for: indexPath)
         cell.model_BaseData_ = self.modelArray[indexPath.row]
-        NSObject.stitchChannelFunc(sender: cell, receiver: self)
+        NSObject.stitchChannelFunc(sender: cell, relay: self)
         return cell
     }
 }

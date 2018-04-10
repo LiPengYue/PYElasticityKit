@@ -48,7 +48,7 @@ extension PYTableView {
         cell.backgroundColor = #colorLiteral(red: 0.8520416148, green: 0.9956474186, blue: 1, alpha: 1)
         
         //发送消息
-        NSObject.stitchChannelFunc(sender: cell, receiver: self)
+        NSObject.stitchChannelFunc(sender: cell, relay: self)
         return cell
     }
 }
