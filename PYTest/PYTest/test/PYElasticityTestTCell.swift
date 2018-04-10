@@ -49,6 +49,11 @@ class PYElasticityTestTCell: PYElasticityTableViewCell {
     
     var modelArray: [Any]?{
         didSet {
+            ///在这里可以对 top View 和 bottom view 的高度约束进行更改
+            //            self.topViewH = 200
+            //            self.bottomViewH = 300
+            
+            ///用这个方法来给collectionViewCell传递数据
             self.setCollectionViewData(data: modelArray ?? [])
         }
     }
