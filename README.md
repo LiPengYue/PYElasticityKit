@@ -1,10 +1,7 @@
-
 ![可以扩展的collectionView1.gif](http://upload-images.jianshu.io/upload_images/4185621-9657ddb5259c094e.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-**特点：**
->1. 高内聚，低耦合，使用简单。配置代码不超过20行。`而且，这20行，不需要你自己想，直接抄就行了。`
->2. 对tableview，基本没有代码侵入，不会影响到你的任何操作，`不过，需要你的tableview，行高自适应`
-##实现思路
+- 对tableview，基本没有代码侵入，不会影响到你的任何操作，`不过，需要你的tableview，行高自适应`
+## 实现思路
 >1. 根据flowLayout以及数据源的count来确定collectionView的Height。
 >2. 根据每行最多展示数，以及未展最多展示数，来确定collectionView展示函数，以确定collectionView的Height。
 >3. 点击展开后，把数据源count显示到最大。并且，改变collectionView的Height。
@@ -97,6 +94,51 @@ func configurationCollectionViwFunc(layout: UICollectionViewFlowLayout,cellClass
  //iOS8之后默认就是这个值，可以省略
        rowHeight = UITableViewAutomaticDimension
 ````
+
+## collectionViewCell 的分类
+解决数据的传输 问题
+在collectionViewCell中，调用 `self.setUPDateSourceFunc`  block来接受数据
+```
+//MARK: - 为cell添加分类
+extension UICollectionViewCell {
+    var setUPDateSourceCallBack: ((_ model: Any)->())? {
+        get {
+            return objc_getAssociatedObject(self, UICollectionViewCell.struct_BaseUICollectionViewKey.k_CellDataSource) as? ((Any) -> ())
+        }
+        set (newValue) {
+            objc_setAssociatedObject(self, UICollectionViewCell.struct_BaseUICollectionViewKey.k_CellDataSource, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
+    
+    struct struct_BaseUICollectionViewKey {
+        static let k_Cell = UnsafeRawPointer.init(bitPattern:"cell".hashValue)
+        static let k_CellDataSource = UnsafeRawPointer.init(bitPattern:"k_CellDataSource".hashValue)
+        static let k_CellIndexPath = UnsafeRawPointer.init(bitPattern:"k_CellIndexPath".hashValue)
+    }
+    var indexPath: NSIndexPath {
+        get {
+            return objc_getAssociatedObject(self, UICollectionViewCell.struct_BaseUICollectionViewKey.k_CellIndexPath) as! NSIndexPath
+        }
+        set (newValue) {
+            setUPDateSourceCallBack?(newValue)
+            objc_setAssociatedObject(self, UICollectionViewCell.struct_BaseUICollectionViewKey.k_CellIndexPath, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    var model_BaseData_: Any {
+        get {
+            return objc_getAssociatedObject(self, UICollectionViewCell.struct_BaseUICollectionViewKey.k_Cell)
+        }
+        set (newValue) {
+            setUPDateSourceCallBack?(newValue)
+            objc_setAssociatedObject(self, UICollectionViewCell.struct_BaseUICollectionViewKey.k_Cell, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    ///collectionViewCell 接受数据 的函数
+    func setUPDateSourceFunc(_ setUPDateSourceCallBack: ((_ model: Any)->())?) {
+        self.setUPDateSourceCallBack = setUPDateSourceCallBack
+    }
+}
+```
 
 ##代码示例
 **tableView代码示例**
@@ -194,9 +236,28 @@ class PYElasticityTestTCell: PYElasticityTableViewCell {
     
     var modelArray: [Any]?{
         didSet {
+            ///在这里可以对 top View 和 bottom view 的高度约束进行更改
+            //            self.topViewH = 200
+            //            self.bottomViewH = 300
+            
+            ///用这个方法来给collectionViewCell传递数据
             self.setCollectionViewData(data: modelArray ?? [])
         }
     }
 }
 ```
-[简书](http://www.jianshu.com/p/fd32ae2c68f4)
+## collectionViewCell中 接受传输的数据的方法 
+```
+  ///collectionViewCell 接受数据 的函数
+    func setUPDateSourceFunc(_ setUPDateSourceCallBack: ((_ model: Any)->())?) {
+        self.setUPDateSourceCallBack = setUPDateSourceCallBack
+    }
+```
+
+---
+ 更新 2018.4.10
+- 对代码进行了瘦身。
+- 修复了在通过对 `self.topViewH`赋值更新 `topView (bottomView) height` 约束的时候会出现莫名的`bug`。
+
+
+[示例代码](https://github.com/LiPengYue/PYElasticityKit)
